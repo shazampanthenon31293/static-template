@@ -1,12 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Static Template</title>
+    <title>the cryptogram</title>
+  
+    <style>
+      .cnt_letter_item{
+        display: inline-block;
+        border: 1px dotted black;
+        padding: 3px;
+        text-align: center;
+      }
+    </style>
+
   </head>
-  <body>
-    <h1>This is a static template, there is no bundler or bundling involved!</h1>
-  </body>
+
+  <form action="./" name="the_form">
+    <fieldset>
+      <legend>cryptomator</legend>
+      <p><input type="text" name="txt_input" placeholder="text to be translated here" size="150" /></p>
+      <p><input type="text" name="txt_output" placeholder="translation here" size="150" readonly="readonly" /></p>
+
+      <fieldset>
+        <legend>cryptos</legend>
+        <div id="cnt_letters"></div>
+      </fieldset>
+
+    </fieldset>
+  </form>
+
+
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script>
+
+    var letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+
+    var letters_temp = shuffleArray(letters.slice(0))
+    // can be accessed via $("[name='letters[m]']").val()
+
+    for (var i = 0; i < letters.length; i++) {
+
+      $("#cnt_letters").append($("<div>").addClass("cnt_letter_item")
+        .append(letters[i])
+        .append("<br>")
+        .append(
+          $("<input>").attr("name", "letters["+letters[i]+"]")
+            .val(letters_temp[i])
+            .attr("size", 2)
+        ))
+
+    }
+
+    /**
+     * Randomize array element order in-place.
+     * Using Durstenfeld shuffle algorithm.
+     */
+    function shuffleArray(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1))
+            var temp = array[i]
+            array[i] = array[j]
+            array[j] = temp
+        }
+        return array
+    }
+
+    $("[name=txt_input]").keyup(function(){
+      console.log("log contents");
+      var the_input = $("[name=txt_input]").val().split("")
+      var translated_text = ""
+
+      for (var i = 0; i < the_input.length; i++) {
+        if($("[name='letters["+the_input[i]+"]']").val() === undefined){
+          translated_text += the_input[i]
+        }else{
+          translated_text += $("[name='letters["+the_input[i]+"]']").val()
+        }
+        
+      }
+
+      $("[name=txt_output]").val(translated_text)
+
+      // if($("[name='letters[m]']").val())
+    })
+
+  </script>
+
 </html>
